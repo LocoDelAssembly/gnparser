@@ -139,9 +139,9 @@ components:
         verbatim:
           description: Input name-string without modifications.
           type: string
-          examples:
+          example:
             trinomial:
-              Lactarius camphoratus var. serifluus (DC.) Barbier, 1901
+              value: Lactarius camphoratus var. serifluus (DC.) Barbier, 1901
         normalized:
           description: A normalized version of the input name-string.
           type: string
