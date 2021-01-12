@@ -30,6 +30,8 @@ info:
 
     The GNparser code and documentation is
     located at https://github.com/gnames/gnparser".
+    For more examples see
+    https://github.com/gnames/gnparser/blob/v1.0.0/testdata/test_data.md
 
   version: "1.0.0"
   title: Global Names Parser API
