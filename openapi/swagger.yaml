@@ -29,7 +29,7 @@ info:
     - Find semantic meaning of every word in a name.
 
     The GNparser code and documentation is
-    located at https://github.com/gnames/gnparser".
+    located at https://github.com/gnames/gnparser.
     For more examples see
     https://github.com/gnames/gnparser/blob/v1.0.0/testdata/test_data.md
 
@@ -57,12 +57,23 @@ paths:
           required: true
           schema:
             type: string
+            example: |
+              Pleurosigma vitrea var. kjellmanii H.Peragallo, 1891a|Bubo bubo
         - in: query
           name: with_details
           description: Returns more detailed parsed data.
           schema:
             type: boolean
-            example: true
+            example: false
+        - in: query
+          name: csv
+          description: |
+            Returns data in CSV format. If it is set to
+            true, `with_details` flag is ignored.
+          schema:
+            type: boolean
+            example: false
+
       responses:
         "200":
           description: search results matching criteria
@@ -76,7 +87,7 @@ paths:
           description: bad input parameter
   /parse:
     post:
-      summary: adds an inventory item
+      summary: TODO (IGNORE FOR NOW)
       operationId: addInventory
       description: Adds an item to the system
       responses:
