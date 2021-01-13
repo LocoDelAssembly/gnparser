@@ -83,6 +83,51 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Parsed"
+                example: |
+                  [
+                    {
+                      "parsed": true,
+                      "quality": 2,
+                      "qualityWarnings": [
+                        {
+                          "quality": 2,
+                          "warning": "Year with latin character"
+                        }
+                      ],
+                      "verbatim": "Pleurosigma vitrea var. kjellmanii H.Peragallo, 1891a",
+                      "normalized": "Pleurosigma vitrea var. kjellmanii H. Peragallo 1891",
+                      "canonical": {
+                        "stemmed": "Pleurosigma uitre kiellmani",
+                        "simple": "Pleurosigma vitrea kjellmanii",
+                        "full": "Pleurosigma vitrea var. kjellmanii"
+                      },
+                      "cardinality": 3,
+                      "authorship": {
+                        "verbatim": "H.Peragallo, 1891a",
+                        "normalized": "H. Peragallo 1891",
+                        "year": "1891",
+                        "authors": [
+                          "H. Peragallo"
+                        ]
+                      },
+                      "id": "f6a5b47b-9917-5a48-b0ff-366bc036ae9c",
+                      "parserVersion": "v0.14.4-32-g83d4320"
+                    },
+                    {
+                      "parsed": true,
+                      "quality": 1,
+                      "verbatim": "Bubo bubo",
+                      "normalized": "Bubo bubo",
+                      "canonical": {
+                        "stemmed": "Bubo bub",
+                        "simple": "Bubo bubo",
+                        "full": "Bubo bubo"
+                      },
+                      "cardinality": 2,
+                      "id": "4431a0f3-e901-519a-886f-9b97e0c99d8e",
+                      "parserVersion": "v0.14.4-32-g83d4320"
+                    }
+                  ]
         "400":
           description: bad input parameter
   /parse:
@@ -186,6 +231,7 @@ components:
             The bacterial names often contain strain information which are
             not parseable and are placed into the "tail" field.
           type: string
+          enum: ["maybe", "yes"]
         virus:
           description: |
             Is set to true in case if name is not parsed, and probably
@@ -213,6 +259,8 @@ components:
             - notho- hybrid
             - hybrid formula
           type: string
+          enum: ["HYBRID", "NAMED_HYBRID", "HYBRID_FORMULA", "NOTHO_HYBRID"]
+          example: NAMED_HYBRID
         surrogate:
           description: |
             This is a wide category of names that do not follow
@@ -223,6 +271,8 @@ components:
             - comparisons (Homo cf. sapiens)
             - approximations (names for specimen that not fully identified)
           type: string
+          enum: ["SURROGATE", "COMPARISON", "APPROXIMATION", "BOLD_SURROGATE"]
+          example: APPROXIMATION
         tail:
           description: |
             Unparseable tail of a name. It might contain "junk", annotations,
@@ -427,12 +477,31 @@ components:
       properties:
         uninomial:
           type: object
+          example: |
+            "uninomial": {
+              "uninomial": "Tribuloideae",
+              "rank": "subfam.",
+              "parent": "Zygophyllaceae",
+              "authorship": {
+                "verbatim": "D.M.Porter",
+                "normalized": "D. M. Porter",
+                "authors": [
+                  "D. M. Porter"
+                ],
+                "originalAuth": {
+                  "authors": [
+                    "D. M. Porter"
+                  ]
+                }
+              }
+            }
           required:
             - value
           properties:
             value:
               description: uninomial name
               type: string
+              example: Tribuloideae
             rank:
               description: |
                 sometimes uninomial names contain their parent, for example
@@ -440,6 +509,7 @@ components:
                 This field contains rank depicted in such name-strings
                 "subfam." in the example.
               type: string
+              example: subfam.
             parent:
               description: |
                 sometimes uninomial names contain their parent, for example
@@ -447,6 +517,7 @@ components:
                 This field contains the parent depicted in such name-strings
                 "Zygophyllaceae" in the example.
               type: string
+              example: Zygophyllaceae
             authorship:
               $ref: "#/components/schemas/Authorship"
 
@@ -458,6 +529,12 @@ components:
       properties:
         species:
           type: object
+          example: |
+            "species": {
+              "genus": "Pycnodonte",
+              "subGenus": "Notostrea",
+              "species": "tarda"
+            }
           required:
             - genus
             - species
@@ -465,18 +542,48 @@ components:
             genus:
               description: genus in a bionomial name
               type: string
+              example: Pycnodonte
             subgenus:
               description: subgenus in a binomial name
               type: string
+              example: Notostrea
             species:
               description: specific epithet of a binomial name
               type: string
+              example: tarda
             authorship:
               $ref: "#/components/schemas/Authorship"
 
     DetailsInfraSpecies:
       description: Details for multinomial names
       type: object
+      example: |
+        "infraSpecies": {
+          "genus": "Pleurosigma",
+          "species": "vitrea",
+          "infraSpecies": [
+            {
+              "value": "kjellmanii",
+              "rank": "var.",
+              "authorship": {
+                "verbatim": "H.Peragallo, 1891a",
+                "normalized": "H. Peragallo 1891",
+                "year": "1891",
+                "authors": [
+                  "H. Peragallo"
+                ],
+                "originalAuth": {
+                  "authors": [
+                    "H. Peragallo"
+                  ],
+                  "year": {
+                    "year": "1891"
+                  }
+                }
+              }
+            }
+          ]
+        }
       required:
         - infraSpecies
       properties:
@@ -489,12 +596,14 @@ components:
             genus:
               description: Genus in a bionomial name
               type: string
+              example: Pleurosigma
             subgenus:
               description: Subgenus in a binomial name
               type: string
             species:
               description: Specific epithet of a binomial name
               type: string
+              example: vitrea
             authorship:
               $ref: "#/components/schemas/Authorship"
             infraSpecies:
@@ -508,14 +617,23 @@ components:
                   value:
                     description: Infra-specific epithet
                     type: string
+                    example: kjellmanii
                   rank:
                     description: Infra-specific rank
+                    type: string
+                    example: var.
                   authorship:
                     $ref: "#/components/schemas/Authorship"
 
     DetailsComparison:
       description: Details for binomial surrogate names with comparison
       type: object
+      example: |
+        "comparison": {
+          "genus": "Melanella",
+          "species": "polita",
+          "comparisonMarker": "cf."
+        }
       required:
         - comparison
       properties:
@@ -528,9 +646,11 @@ components:
             genus:
               description: genus in a bionomial name
               type: string
+              example: Melanella
             species:
               description: specific epithet of a binomial name
               type: string
+              example: polita
             authorship:
               $ref: "#/components/schemas/Authorship"
             comparisonMarker:
@@ -541,10 +661,16 @@ components:
     DetailsApproximation:
       description: Details for surrogate names with
       type: object
+      example: |
+        "approximation": {
+          "genus": "Pleistophora",
+          "approximationMarker": "sp.",
+          "ignored": " 2 CHU"
+        }
       required:
         - approximation
       properties:
-        comparison:
+        approximation:
           type: object
           required:
             - genus
@@ -553,6 +679,7 @@ components:
             genus:
               description: genus in a bionomial name
               type: string
+              example: Pleistophora
             species:
               description: specific epithet of a binomial name
               type: string
@@ -561,13 +688,30 @@ components:
             comparisonMarker:
               description: Approximation term, for example "sp., spp., aff."
               type: string
+              example: sp.
             ignored:
               description: Ignored part of approximation name.
               type: string
+              example: " 2 CHU"
 
     DetailsHybridFormula:
       description: Details for hybrid formula names
       type: object
+      example: |
+        "hybridFormula": [
+          {
+            "species": {
+              "genus": "Stanhopea",
+              "species": "tigrina"
+            }
+          },
+          {
+            "species": {
+              "genus": "Stanhopea",
+              "species": "ecornuta"
+            }
+          }
+        ]
       required:
         - hybridFormula
       properties:
