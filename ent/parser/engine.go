@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"io"
+
 	"github.com/gnames/gnparser/ent/parsed"
 	"github.com/gnames/gnparser/io/dict"
 	"github.com/gnames/tribool"
@@ -68,7 +70,7 @@ func (p *Engine) OutputAST() {
 	var node *node32
 	var skip bool
 	var stack *element
-	for token := range p.Tokens() {
+	for _, token := range p.Tokens() {
 		if node, skip = p.newNode(token); skip {
 			continue
 		}
@@ -90,12 +92,12 @@ func stackNodeIsWithin(n *node32, t token32) bool {
 
 // PrintOutputSyntaxTree outputs a simplified version of a nodes
 // Abstract Syntax Tree. This method can be used for debugging purposes.
-// func (p *Engine) PrintOutputSyntaxTree(w io.Writer) {
-// 	if p.root == nil || p.root.pegRule != ruleSciName {
-// 		return
-// 	}
-// 	p.root.print(w, true, p.Buffer)
-// }
+func (p *Engine) PrintOutputSyntaxTree(w io.Writer) {
+	if p.root == nil || p.root.pegRule != ruleSciName {
+		return
+	}
+	p.root.print(w, true, p.Buffer)
+}
 
 func (p *Engine) newNode(t token32) (*node32, bool) {
 	var node *node32
