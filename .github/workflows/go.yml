@@ -17,6 +17,12 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
+    - name: Install peg
+      run: go get -u github.com/pointlander/peg
+
+    - name: Install goimports
+      run: go get golang.org/x/tools/cmd/goimports
+
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
     - run: git fetch --prune --unshallow
@@ -28,12 +34,6 @@ jobs:
 
     - name: Get dependencies
       run: make deps
-
-    - name: Install peg
-      run: go get -u github.com/pointlander/peg
-
-    - name: Install goimports
-      run: go get golang.org/x/tools/cmd/goimports
 
     - name: Build
       run: make
