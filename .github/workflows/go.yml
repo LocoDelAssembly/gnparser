@@ -29,6 +29,9 @@ jobs:
     - name: Get dependencies
       run: make deps
 
+    - name: Install peg
+      run: go get -u github.com/pointlander/peg
+
     - name: Build
       run: make
 
