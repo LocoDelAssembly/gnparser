@@ -16,10 +16,10 @@ GOINSTALL = $(GOCMD) install $(FLAGS_LD)
 GOCLEAN = $(GOCMD) clean
 GOGET = $(GOCMD) get
 
-all: install
+all: build
 
-test: deps install
-	$(FLAG_MODULE) go test ./...
+test: deps build
+	$(FLAG_MODULE) go test -v ./...
 
 test-build: deps build
 
