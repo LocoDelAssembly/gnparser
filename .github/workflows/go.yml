@@ -36,16 +36,13 @@ jobs:
       run: make deps
 
     - name: Build
-      run: make
+      run: make build
 
     - name: Build C lib
       run: make clib
 
     - name: Test
       run: make test
-
-    - name: Install
-      run: make install
 
     - name: Store binary
       uses: actions/upload-artifact@v2
