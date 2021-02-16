@@ -35,15 +35,15 @@ jobs:
     - name: Get dependencies
       run: make deps
 
+    - name: Test
+      run: make test
+
     - name: Build
       run: make build
 
     - name: Build C lib
       run: make clib
-
-    - name: Test
-      run: make test
-
+      
     - name: Store binary
       uses: actions/upload-artifact@v2
       with:
